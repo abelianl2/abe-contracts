@@ -18,7 +18,6 @@ npx hardhat ignition deploy ./ignition/modules/AbeToken.ts --network localhost
 ```
 
 ## deploy localhost and transfer
-```
-shell
+```shell
 npx hardhat deployAndTransferAbeToken --recipient <address>  --amount <amount> --network localhost
 ```
