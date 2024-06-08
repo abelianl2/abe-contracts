@@ -16,3 +16,9 @@ npx hardhat test
 npx hardhat node
 npx hardhat ignition deploy ./ignition/modules/AbeToken.ts --network localhost
 ```
+
+## deploy localhost and transfer
+```
+shell
+npx hardhat deployAndTransferAbeToken --recipient <address>  --amount <amount> --network localhost
+```

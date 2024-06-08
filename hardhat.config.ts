@@ -1,5 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import "./tasks/abeToken"
 
 const config: HardhatUserConfig = {
   solidity: "0.8.24",
