@@ -1,6 +1,12 @@
 # Abe Chain Contrats
 contract Management Warehouse for Abe Chain
 
+## install
+```shell
+node v16.14.0
+npm 7.24.2
+```
+
 ## compile
 ```shell
 npx hardhat compile
