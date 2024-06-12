@@ -1,13 +1,19 @@
 # Abe Chain Contrats
 contract Management Warehouse for Abe Chain
 
-## install
+## Requirements
 ```shell
 node v16.14.0
 npm 7.24.2
 ```
 
-## compile
+## Install
+```shell
+npm i
+npm i @openzeppelin/contracts-upgradeable
+```
+
+## Compile
 ```shell
 npx hardhat compile
 ```
@@ -21,15 +27,16 @@ npx hardhat test
 > npm i -g dotenv
 ```shell
 vim .env
-PRIVATE_KEY=<PRIVATE_KEY>
+DA_PRIVATE_KEY=<private key>
+ZK_PRIVATE_KEY=<private key>
 ```
 
-## deploy on abeDA network
+## deploy on abeToken abeDA 
 ```shell
 npx hardhat deployAbeToken --network abeDA 
 ```
 
-## transfer token to sequencer
+## transfer abe to sequencer
 ```shell
 npx hardhat transferAbeToken --recipient <recipient address> --amount <amount> --contractaddress <contract address> --network abeDA
 ```
@@ -38,4 +45,10 @@ npx hardhat transferAbeToken --recipient <recipient address> --amount <amount> -
 ```shell
 npx hardhat node
 npx hardhat ignition deploy ./ignition/modules/AbeToken.ts --network localhost
+```
+
+
+## deploy simpleBridge on zkNode and transfer token to it
+```shell
+npx hardhat deploySimpleBridgeAndTransfer --amount <amount> --network zkNode
 ```

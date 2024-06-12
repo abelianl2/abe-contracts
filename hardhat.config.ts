@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "./tasks/abeToken"
+import "./tasks/simplebridge"
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,9 +10,14 @@ const config: HardhatUserConfig = {
   networks: {
     abeDA: {
       url: "http://124.243.137.251:8888",
-      accounts: [process.env.PRIVATE_KEY || ""], // if use abeDA, you need to set your private key to .env
+      accounts: [process.env.DA_PRIVATE_KEY || ""], // if use abeDA, you need to set your private key to .env
       chainId: 9000,
     },
+    zkNode:{
+      url: "http://124.243.137.251:8123",
+      accounts: [process.env.ZK_PRIVATE_KEY || ""], // if use zkNode, you need to set your private key to .env
+      chainId: 1001,
+    }
   },
 };
 
