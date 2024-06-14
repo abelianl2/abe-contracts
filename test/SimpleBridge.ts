@@ -1,9 +1,9 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { SimpleBridge, SimpleBridge__factory } from '../typechain-types';
+import { SimpleBridge__factory, SimpleBridgeV2 } from '../typechain-types';
 
 describe('SimpleBridge with UUID Handling', () => {
-    let simpleBridge: SimpleBridge;
+    let simpleBridgeV2: SimpleBridgeV2;
     let deployer: any;
     let user: any;
     const BtcToEthRate = 10000000000;
@@ -14,15 +14,15 @@ describe('SimpleBridge with UUID Handling', () => {
 
     beforeEach(async () => {
         [deployer, user] = await ethers.getSigners();
-        const SimpleBridgeFactory = (await ethers.getContractFactory('SimpleBridge', deployer)) as SimpleBridge__factory;
-        simpleBridge = await SimpleBridgeFactory.deploy() as SimpleBridge;
-        await simpleBridge.initialize();
+        const SimpleBridgeFactory = (await ethers.getContractFactory('SimpleBridgeV2', deployer)) as SimpleBridge__factory;
+        simpleBridgeV2 = await SimpleBridgeFactory.deploy() as SimpleBridgeV2;
+        await simpleBridgeV2.initialize();
 
-        console.log('SimpleBridge deployed to:', await simpleBridge.getAddress())
+        console.log('SimpleBridge deployed to:', await simpleBridgeV2.getAddress())
 
         const amountToSend = ethers.parseEther("1.0");
         const tx = await deployer.sendTransaction({
-            to: simpleBridge.getAddress(),
+            to: simpleBridgeV2.getAddress(),
             value: amountToSend
         });
 
@@ -33,11 +33,7 @@ describe('SimpleBridge with UUID Handling', () => {
         const btcAmount = 1;
         const depositUuidBytes32 = uuidToBytes32(depositUUID);
 
-        expect(await simpleBridge.isDepositUuidUsed(depositUuidBytes32)).to.be.false;
-        await simpleBridge.connect(deployer).deposit(depositUuidBytes32, b2_to_address, btcAmount);
-
-        expect(await simpleBridge.isDepositUuidUsed(depositUuidBytes32)).to.be.true;
-
+        await simpleBridgeV2.connect(deployer).depositV2(depositUuidBytes32, b2_to_address, btcAmount);
         expect(await ethers.provider.getBalance(b2_to_address)).to.equal(btcAmount * BtcToEthRate);
     });
 });

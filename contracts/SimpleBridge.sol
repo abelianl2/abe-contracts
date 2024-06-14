@@ -5,16 +5,9 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
 interface ISimpleBridge {
-    function deposit(
-        bytes32 deposit_uuid,
-        address to_address,
-        uint256 amount
-    ) external;
+    function deposit(address to_address, uint256 amount) external;
 
-    function withdraw(
-        bytes32 withdraw_uuid,
-        string calldata btc_address
-    ) external payable;
+    function withdraw(string calldata btc_address) external payable;
 
     event DepositEvent(
         address indexed caller,
@@ -38,9 +31,6 @@ contract SimpleBridge is
 
     bytes32 public constant ADMIN_ROLE = keccak256("admin_role");
 
-    mapping(bytes32 => bool) deposit_uuids;
-    mapping(bytes32 => bool) withdraw_uuids;
-
     function initialize() public initializer {
         __AccessControl_init();
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -48,6 +38,30 @@ contract SimpleBridge is
     }
 
     function deposit(
+        address b2_to_address,
+        uint256 btc_amount
+    ) external onlyRole(ADMIN_ROLE) {
+        uint256 b2_amount = btc_amount * 10000000000;
+        payable(b2_to_address).transfer(b2_amount);
+        emit DepositEvent(msg.sender, b2_to_address, b2_amount);
+    }
+
+    function withdraw(string calldata btc_address) external payable {
+        uint256 b2_amount = msg.value;
+        uint256 btc_amount = b2_amount / 10000000000;
+        emit WithdrawEvent(msg.sender, btc_address, btc_amount);
+    }
+}
+
+contract SimpleBridgeV2 is SimpleBridge {
+    mapping(bytes32 => bool) deposit_uuids;
+    mapping(bytes32 => bool) withdraw_uuids;
+
+    function version() external pure returns (uint256) {
+        return 2;
+    }
+
+    function depositV2(
         bytes32 deposit_uuid,
         address b2_to_address,
         uint256 btc_amount
@@ -59,7 +73,7 @@ contract SimpleBridge is
         emit DepositEvent(msg.sender, b2_to_address, b2_amount);
     }
 
-    function withdraw(
+    function withdrawV2(
         bytes32 withdraw_uuid,
         string calldata btc_address
     ) external payable {
@@ -68,17 +82,5 @@ contract SimpleBridge is
         uint256 b2_amount = msg.value;
         uint256 btc_amount = b2_amount / 10000000000;
         emit WithdrawEvent(msg.sender, btc_address, btc_amount);
-    }
-
-    function isDepositUuidUsed(
-        bytes32 deposit_uuid
-    ) public view returns (bool) {
-        return deposit_uuids[deposit_uuid];
-    }
-
-    function isWithdrawUuidUsed(
-        bytes32 withdraw_uuid
-    ) public view returns (bool) {
-        return withdraw_uuids[withdraw_uuid];
     }
 }
