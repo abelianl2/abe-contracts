@@ -68,7 +68,7 @@ contract SimpleBridgeV2 is SimpleBridge {
     ) external onlyRole(ADMIN_ROLE) {
         require(!deposit_uuids[deposit_uuid], "non-repeatable processing");
         deposit_uuids[deposit_uuid] = true;
-        uint256 b2_amount = btc_amount * 10000000000;
+        uint256 b2_amount = btc_amount * 100000;
         payable(b2_to_address).transfer(b2_amount);
         emit DepositEvent(msg.sender, b2_to_address, b2_amount);
     }
@@ -80,7 +80,7 @@ contract SimpleBridgeV2 is SimpleBridge {
         require(!withdraw_uuids[withdraw_uuid], "non-repeatable processing");
         withdraw_uuids[withdraw_uuid] = true;
         uint256 b2_amount = msg.value;
-        uint256 btc_amount = b2_amount / 10000000000;
+        uint256 btc_amount = b2_amount / 100000;
         emit WithdrawEvent(msg.sender, btc_address, btc_amount);
     }
 }
