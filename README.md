@@ -4,15 +4,20 @@ contract Management Warehouse for Abe Chain
 ## Requirements
 ```shell
 node v16.14.0
-```
+npm v7.24.2
 
-## Install
-[set nvm] 
-```shell
+[install nvm & node]
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm install 16.14.0
 nvm use 16.14.0
-npm install --save-dev hardhat
+
+[install npm]
+npm install npm@7.24.2 -g
+```
+
+## Install
+```shell
+npm install 
 ```
 
 ## config
@@ -56,6 +61,14 @@ npx hardhat transferAbeToken --recipient <recipient address> --amount <amount> -
 ## deploy simpleBridge on zkNode and transfer token to it
 > This script will deploy simplebridge
 > and transfer zknode's native tokens to simplebridge at the same time
+1. deploy simplebridge
 ```shell
-npx hardhat deploySimpleBridgeAndTransfer --amount <amount> --network zkNode
+npx hardhat deploySimpleBridge --network zkNode
+```
+
+2. transfer zknode's native tokens to simplebridge
+> contract address is the address obtained from deploying the contract above
+> Amount suggests 10000000
+```shell
+npx hardhat transferToSimpleBridge --amount <amount> --address <contract address>  --network zkNode
 ```
